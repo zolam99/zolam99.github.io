@@ -15,95 +15,120 @@ body{
   overflow:hidden;position:relative;
 }
 
-/* Scanline overlay */
+/* Scanline */
 body::after{
   content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);
   pointer-events:none;z-index:2;
 }
 
-/* Grid background */
+/* Grid */
 .grid-bg{
   position:fixed;inset:0;z-index:1;
   background-image:
-    linear-gradient(rgba(0,255,100,0.02) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,100,0.02) 1px,transparent 1px);
+    linear-gradient(rgba(0,255,100,0.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,100,0.018) 1px,transparent 1px);
   background-size:44px 44px;
-  animation:gridDrift 20s linear infinite;
+  animation:gridDrift 24s linear infinite;
 }
-@keyframes gridDrift{
-  0%{background-position:0 0}
-  100%{background-position:44px 44px}
-}
+@keyframes gridDrift{to{background-position:44px 44px}}
 
-/* Terminal background */
+/* Terminal bg */
 .term-bg{
   position:fixed;inset:0;z-index:1;
   overflow:hidden;
-  padding:10px 14px;
+  padding:12px 16px;
   font-size:9.5px;
-  line-height:1.6;
+  line-height:1.65;
   font-family:'Courier New',monospace;
   pointer-events:none;
   word-break:break-all;
-  opacity:0.22;
+  opacity:0.2;
 }
 
+/* Center card */
 .wrap{
   position:relative;z-index:3;
   text-align:center;
-  width:92%;max-width:360px;
-  padding:20px;
+  width:92%;max-width:380px;
+  padding:48px 32px 40px;
+  background:rgba(5,14,7,0.6);
+  border:1px solid rgba(0,255,100,0.08);
+  border-radius:20px;
+  backdrop-filter:blur(2px);
+  animation:cardIn 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
 }
+@keyframes cardIn{0%{opacity:0;transform:translateY(24px) scale(0.97)}100%{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Subtle corner accents */
+.wrap::before,.wrap::after{
+  content:'';position:absolute;
+  width:40px;height:40px;
+  border-color:rgba(0,255,100,0.25);
+  border-style:solid;
+}
+.wrap::before{top:-1px;left:-1px;border-width:2px 0 0 2px;border-radius:20px 0 0 0}
+.wrap::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;border-radius:0 0 20px 0}
 
 /* Ring */
 .ring-wrap{
-  opacity:0;animation:scaleIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
-  width:150px;height:150px;
-  margin:0 auto 36px;
+  opacity:0;animation:scaleIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.25s forwards;
+  width:140px;height:140px;
+  margin:0 auto 40px;
   position:relative;perspective:400px;
 }
-@keyframes scaleIn{0%{opacity:0;transform:scale(0.7)}100%{opacity:1;transform:scale(1)}}
+@keyframes scaleIn{0%{opacity:0;transform:scale(0.6)}100%{opacity:1;transform:scale(1)}}
 
 .ring1{
   position:absolute;inset:0;border-radius:50%;
   border:2.5px solid transparent;
   border-top-color:#00ff64;
-  border-right-color:rgba(0,255,100,0.25);
+  border-right-color:rgba(0,255,100,0.2);
   animation:r1 1.8s linear infinite;
   transform-style:preserve-3d;
-  filter:drop-shadow(0 0 10px #00ff64);
+  filter:drop-shadow(0 0 12px rgba(0,255,100,0.8));
 }
 .ring2{
-  position:absolute;inset:14px;border-radius:50%;
+  position:absolute;inset:13px;border-radius:50%;
   border:2px solid transparent;
-  border-bottom-color:rgba(0,255,100,0.55);
-  border-left-color:rgba(0,255,100,0.2);
+  border-bottom-color:rgba(0,255,100,0.6);
+  border-left-color:rgba(0,255,100,0.18);
   animation:r2 1.3s linear infinite;
   transform-style:preserve-3d;
-  filter:drop-shadow(0 0 6px rgba(0,255,100,0.4));
+  filter:drop-shadow(0 0 7px rgba(0,255,100,0.45));
 }
 .ring3{
-  position:absolute;inset:28px;border-radius:50%;
+  position:absolute;inset:26px;border-radius:50%;
   border:1.5px solid transparent;
-  border-top-color:rgba(0,255,100,0.3);
+  border-top-color:rgba(0,255,100,0.28);
   animation:r3 2.4s linear infinite reverse;
-  transform-style:preserve-3d;
 }
 .ring4{
-  position:absolute;inset:5px;border-radius:50%;
-  border:1px solid rgba(0,255,100,0.06);
-  animation:breathe 3s ease-in-out infinite;
+  position:absolute;inset:4px;border-radius:50%;
+  border:1px solid rgba(0,255,100,0.05);
+  animation:breathe 3.2s ease-in-out infinite;
 }
-@keyframes r1{0%{transform:rotateX(65deg) rotateZ(0deg)}100%{transform:rotateX(65deg) rotateZ(360deg)}}
-@keyframes r2{0%{transform:rotateX(65deg) rotateZ(0deg)}100%{transform:rotateX(65deg) rotateZ(360deg)}}
-@keyframes r3{0%{transform:rotateX(65deg) rotateZ(0deg)}100%{transform:rotateX(65deg) rotateZ(360deg)}}
-@keyframes breathe{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.06);opacity:1}}
+/* Outer pulse ring */
+.ring5{
+  position:absolute;inset:-12px;border-radius:50%;
+  border:1px solid rgba(0,255,100,0.07);
+  animation:outerPulse 2.4s ease-out infinite;
+}
+@keyframes outerPulse{
+  0%{transform:scale(0.95);opacity:0.5}
+  60%{transform:scale(1.08);opacity:0}
+  100%{transform:scale(1.08);opacity:0}
+}
+
+@keyframes r1{to{transform:rotateX(65deg) rotateZ(360deg)}}
+@keyframes r2{to{transform:rotateX(65deg) rotateZ(360deg)}}
+@keyframes r3{to{transform:rotateX(65deg) rotateZ(360deg)}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.07);opacity:1}}
 
 .ring-wrap::before{
-  content:'';position:absolute;inset:15px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,255,100,0.1) 0%,transparent 70%);
-  animation:breathe 3s ease-in-out infinite;
+  content:'';position:absolute;inset:14px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,255,100,0.09) 0%,transparent 70%);
+  animation:breathe 3.2s ease-in-out infinite;
 }
 
 .icon-core{
@@ -111,109 +136,128 @@ body::after{
   display:flex;align-items:center;justify-content:center;
 }
 .ic{
-  width:38px;height:38px;fill:none;
-  stroke:#00ff64;stroke-width:1.8;
+  width:36px;height:36px;fill:none;
+  stroke:#00ff64;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round;
-  filter:drop-shadow(0 0 10px rgba(0,255,100,0.7));
-  animation:iconPulse 2s ease-in-out infinite;
+  animation:iconPulse 2.2s ease-in-out infinite;
 }
-@keyframes iconPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(0,255,100,0.6))}50%{filter:drop-shadow(0 0 18px rgba(0,255,100,0.9))}}
+@keyframes iconPulse{
+  0%,100%{filter:drop-shadow(0 0 8px rgba(0,255,100,0.55))}
+  50%{filter:drop-shadow(0 0 20px rgba(0,255,100,0.95))}
+}
 
-/* Title with glitch */
+/* Title */
 .title{
-  opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards;
-  font-size:26px;font-weight:800;
-  margin-bottom:12px;letter-spacing:-0.5px;
+  opacity:0;animation:slideUp 0.55s cubic-bezier(0.16,1,0.3,1) 0.4s forwards;
+  font-size:27px;font-weight:800;
+  margin-bottom:14px;letter-spacing:-0.5px;
   color:#00ff64;
-  text-shadow:0 0 30px rgba(0,255,100,0.5),0 0 60px rgba(0,255,100,0.2);
+  text-shadow:0 0 28px rgba(0,255,100,0.45),0 0 60px rgba(0,255,100,0.15);
+  min-height:36px;
 }
-.title.glitch{animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards,glitch 4s ease-in-out 1.5s infinite}
 @keyframes glitch{
-  0%,90%,100%{
-    text-shadow:0 0 30px rgba(0,255,100,0.5),0 0 60px rgba(0,255,100,0.2);
+  0%,88%,100%{
+    text-shadow:0 0 28px rgba(0,255,100,0.45),0 0 60px rgba(0,255,100,0.15);
     transform:translate(0);
   }
-  92%{
-    text-shadow:-3px 0 rgba(0,200,255,0.6),3px 0 rgba(255,0,100,0.5),0 0 30px rgba(0,255,100,0.4);
+  90%{
+    text-shadow:-3px 0 rgba(0,200,255,0.65),3px 0 rgba(255,0,120,0.5),0 0 28px rgba(0,255,100,0.3);
     transform:translate(-2px,0);
   }
-  94%{
-    text-shadow:3px 0 rgba(0,200,255,0.6),-3px 0 rgba(255,0,100,0.5),0 0 30px rgba(0,255,100,0.4);
+  92%{
+    text-shadow:3px 0 rgba(0,200,255,0.65),-3px 0 rgba(255,0,120,0.5),0 0 28px rgba(0,255,100,0.3);
     transform:translate(2px,0);
   }
+  94%{
+    text-shadow:-1px 0 rgba(0,200,255,0.4),1px 0 rgba(255,0,120,0.3);
+    transform:translate(-1px,0);
+  }
   96%{
-    text-shadow:0 0 30px rgba(0,255,100,0.5);
+    text-shadow:0 0 28px rgba(0,255,100,0.45);
     transform:translate(0);
   }
 }
+.title.glitch-active{animation:slideUp 0.55s cubic-bezier(0.16,1,0.3,1) 0.4s forwards,glitch 5s ease-in-out 2s infinite}
 
+/* Subtitle */
 .subtitle{
-  opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.55s forwards;
-  font-size:13.5px;color:rgba(255,255,255,0.32);
-  margin-bottom:28px;line-height:1.9;font-weight:400;
+  opacity:0;animation:slideUp 0.55s cubic-bezier(0.16,1,0.3,1) 0.55s forwards;
+  font-size:13.5px;color:rgba(255,255,255,0.3);
+  margin-bottom:36px;line-height:2;font-weight:400;
 }
+
+/* Divider */
+.divider{
+  opacity:0;animation:fadeIn 0.5s ease 0.65s forwards;
+  width:60px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,100,0.3),transparent);
+  margin:0 auto 32px;
+}
+@keyframes fadeIn{to{opacity:1}}
 
 /* Buttons */
 .btn-wrap{
-  opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
+  opacity:0;animation:slideUp 0.55s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
   display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
 }
 
 .btn{
   display:inline-flex;align-items:center;gap:9px;
   text-decoration:none;font-size:13px;font-weight:700;
-  padding:13px 24px;border-radius:12px;
+  padding:13px 26px;border-radius:12px;
   color:#fff;letter-spacing:0.3px;
   cursor:pointer;position:relative;overflow:hidden;
-  transition:all 0.25s;
+  transition:transform 0.22s ease,box-shadow 0.22s ease;
 }
 .btn::before{
   content:'';position:absolute;top:0;left:-100%;
-  width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);
-  animation:shimmer 3s ease-in-out 2s infinite;
+  width:55%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);
+  animation:shimmer 3.5s ease-in-out 1.5s infinite;
 }
-@keyframes shimmer{0%{left:-100%}100%{left:200%}}
-.btn:hover{transform:translateY(-2px)}
+@keyframes shimmer{0%,100%{left:-100%}50%{left:200%}}
+.btn:hover{transform:translateY(-3px)}
 .btn:active{transform:translateY(0)}
 
 .btn-tg{
   background:linear-gradient(135deg,#0077b5,#229ed9);
-  border:1px solid rgba(34,158,217,0.3);
-  box-shadow:0 4px 20px rgba(34,158,217,0.25);
+  border:1px solid rgba(34,158,217,0.28);
+  box-shadow:0 4px 20px rgba(34,158,217,0.22),inset 0 1px 0 rgba(255,255,255,0.07);
 }
-.btn-tg:hover{box-shadow:0 6px 30px rgba(34,158,217,0.45)}
+.btn-tg:hover{box-shadow:0 7px 32px rgba(34,158,217,0.42)}
 
 .btn-yt{
-  background:linear-gradient(135deg,#c4302b,#ff0000);
-  border:1px solid rgba(255,0,0,0.3);
-  box-shadow:0 4px 20px rgba(255,0,0,0.22);
+  background:linear-gradient(135deg,#c0392b,#e74c3c);
+  border:1px solid rgba(231,76,60,0.28);
+  box-shadow:0 4px 20px rgba(231,76,60,0.2),inset 0 1px 0 rgba(255,255,255,0.07);
 }
-.btn-yt:hover{box-shadow:0 6px 30px rgba(255,0,0,0.4)}
+.btn-yt:hover{box-shadow:0 7px 32px rgba(231,76,60,0.38)}
 
 /* Ripple */
 .ripple{
   position:absolute;border-radius:50%;
-  background:rgba(255,255,255,0.2);
-  transform:scale(0);animation:rippleAnim 0.5s linear;
+  background:rgba(255,255,255,0.18);
+  transform:scale(0);animation:rippleAnim 0.55s linear;
   pointer-events:none;
 }
 @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
 
 /* Footer */
 .footer{
-  opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
-  margin-top:30px;
+  opacity:0;animation:slideUp 0.55s cubic-bezier(0.16,1,0.3,1) 0.88s forwards;
+  margin-top:32px;
   font-size:9px;font-weight:700;
-  color:rgba(0,255,100,0.3);
-  letter-spacing:3px;
+  color:rgba(0,255,100,0.28);
+  letter-spacing:3.5px;
   font-family:'Courier New',monospace;
-  border-top:1px solid rgba(0,255,100,0.1);
-  padding-top:14px;
-  text-shadow:0 0 10px rgba(0,255,100,0.2);
+  border-top:1px solid rgba(0,255,100,0.08);
+  padding-top:16px;
 }
 
-@keyframes slideUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{
+  0%{opacity:0;transform:translateY(18px)}
+  100%{opacity:1;transform:translateY(0)}
+}
 </style>
 </head>
 <body>
@@ -223,6 +267,7 @@ body::after{
 
 <div class="wrap">
   <div class="ring-wrap">
+    <div class="ring5"></div>
     <div class="ring1"></div>
     <div class="ring2"></div>
     <div class="ring3"></div>
@@ -230,8 +275,9 @@ body::after{
     <div class="icon-core" id="iconCore"></div>
   </div>
 
-  <div class="title glitch" id="title">Access Expired</div>
-  <div class="subtitle" id="subtitle">Your access has expired.<br>Please contact admin to renew.</div>
+  <div class="title" id="title"></div>
+  <div class="subtitle" id="subtitle"></div>
+  <div class="divider"></div>
 
   <div class="btn-wrap">
     <a class="btn btn-tg" id="btnTg" href="https://t.me/freefilebd">
@@ -248,12 +294,10 @@ body::after{
 </div>
 
 <script>
-// State config
 const params = new URLSearchParams(window.location.search);
 const s = params.get('s') || 'expired';
 
 const icons = {
-  shield: `<svg class="ic" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
   wifi:   `<svg class="ic" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>`,
   update: `<svg class="ic" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
   lock:   `<svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
@@ -277,69 +321,71 @@ document.getElementById('subtitle').innerHTML = c.sub;
 // Typewriter title
 const titleEl = document.getElementById('title');
 setTimeout(() => {
-  titleEl.textContent = '';
   let i = 0;
   const type = () => {
     if (i < c.title.length) {
       titleEl.textContent += c.title[i++];
-      setTimeout(type, 55);
+      setTimeout(type, 52);
+    } else {
+      titleEl.classList.add('glitch-active');
     }
   };
   type();
-}, 400);
+}, 420);
 
-// Ripple on buttons
+// Ripple
 [document.getElementById('btnTg'), document.getElementById('btnYt')].forEach(btn => {
   btn.addEventListener('click', function(e) {
     const r = document.createElement('span');
     r.classList.add('ripple');
     const rect = this.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
-    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px`;
+    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
     this.appendChild(r);
-    setTimeout(() => r.remove(), 500);
+    setTimeout(() => r.remove(), 550);
   });
 });
 
-// Terminal background typewriter
+// Terminal background
 const termEl = document.getElementById('termBg');
 const termLines = [
-  { t: 'sys',  tx: 'ZOLAM_AUTH v2.4.1 :: INITIALIZING...' },
-  { t: 'ok',   tx: '[SYS] Loading kernel modules... OK' },
-  { t: 'ok',   tx: '[NET] Establishing secure tunnel... DONE' },
-  { t: 'info', tx: 'AUTH_CHECK :: device_id=0xA3F2C1D9' },
-  { t: 'info', tx: '[SCAN] Verifying token integrity...' },
-  { t: 'info', tx: 'TOKEN_HASH: 8f3a2b1c9d4e5f6a7b8c' },
-  { t: 'warn', tx: '[WARN] Session expired at 1728757200' },
-  { t: 'err',  tx: 'STATUS :: ACCESS_DENIED' },
-  { t: 'err',  tx: '[ERR] 0x403 :: Unauthorized device' },
-  { t: 'err',  tx: 'Checking bypass modules... FAILED' },
-  { t: 'info', tx: '[LOG] ip=192.168.1.x port=8443' },
-  { t: 'info', tx: 'ssl_cert: ZolamFF_ROOT_CA.pem' },
-  { t: 'warn', tx: '[NET] ping 10.0.0.1 ... timeout' },
-  { t: 'err',  tx: 'reauth_attempt: 3/3 FAILED' },
-  { t: 'sys',  tx: '[SYS] Dumping stack trace...' },
-  { t: 'info', tx: 'at AuthModule.verify (auth.js:142)' },
-  { t: 'info', tx: 'at TokenValidator.check (token.js:88)' },
-  { t: 'warn', tx: '[DB] SELECT * FROM users WHERE id=?' },
-  { t: 'err',  tx: 'query_result: 0 rows' },
-  { t: 'ok',   tx: '[CRYPT] AES-256-GCM decrypt... OK' },
-  { t: 'err',  tx: 'sig_verify: RSA-4096 MISMATCH' },
-  { t: 'err',  tx: '[SEC] Firewall rule #44 triggered' },
-  { t: 'err',  tx: 'BLOCK :: reason=expired_license' },
-  { t: 'ok',   tx: '[MOD] ZolamFF protection active' },
-  { t: 'info', tx: 'youtube: @zolamff' },
-  { t: 'info', tx: 'contact: t.me/freefilebd' },
-  { t: 'sys',  tx: 'ZOLAM_AUTH :: session terminated.' },
-  { t: 'sys',  tx: '----------------------------------------' },
+  { t:'sys',  tx:'ZOLAM_AUTH v2.4.1 :: INITIALIZING...' },
+  { t:'ok',   tx:'[SYS] Loading kernel modules... OK' },
+  { t:'ok',   tx:'[NET] Establishing secure tunnel... DONE' },
+  { t:'info', tx:'AUTH_CHECK :: device_id=0xA3F2C1D9B8E7' },
+  { t:'info', tx:'[SCAN] Verifying token integrity...' },
+  { t:'info', tx:'TOKEN_HASH: 8f3a2b1c9d4e5f6a7b8c9d0e' },
+  { t:'warn', tx:'[WARN] Session expired :: ts=1728757200' },
+  { t:'err',  tx:'STATUS :: ACCESS_DENIED' },
+  { t:'err',  tx:'[ERR] 0x403 :: Unauthorized device' },
+  { t:'err',  tx:'Checking bypass modules... FAILED' },
+  { t:'info', tx:'[LOG] ip=192.168.1.x port=8443 proto=TLS' },
+  { t:'info', tx:'ssl_cert: ZolamFF_ROOT_CA.pem :: valid' },
+  { t:'warn', tx:'[NET] ping 10.0.0.1 ... timeout (3000ms)' },
+  { t:'err',  tx:'reauth_attempt: 3/3 FAILED' },
+  { t:'sys',  tx:'[SYS] Dumping stack trace...' },
+  { t:'info', tx:'  at AuthModule.verify (auth.js:142:8)' },
+  { t:'info', tx:'  at TokenValidator.check (token.js:88:4)' },
+  { t:'info', tx:'  at Gateway.handle (gateway.js:56:12)' },
+  { t:'warn', tx:'[DB] SELECT * FROM sessions WHERE uid=?' },
+  { t:'err',  tx:'query_result: 0 rows :: session not found' },
+  { t:'ok',   tx:'[CRYPT] AES-256-GCM init... OK' },
+  { t:'err',  tx:'sig_verify: RSA-4096 MISMATCH :: invalid' },
+  { t:'err',  tx:'[SEC] Firewall rule #44 TRIGGERED' },
+  { t:'err',  tx:'BLOCK :: reason=expired_license :: code=403' },
+  { t:'ok',   tx:'[MOD] ZolamFF protection layer ACTIVE' },
+  { t:'info', tx:'channel: youtube.com/@zolamff' },
+  { t:'info', tx:'support: t.me/freefilebd' },
+  { t:'sys',  tx:'ZOLAM_AUTH :: session terminated. Goodbye.' },
+  { t:'sys',  tx:'════════════════════════════════════════' },
 ];
 
 const termColors = {
-  sys:  'rgba(0,255,100,0.55)',
-  ok:   'rgba(0,220,80,0.8)',
-  info: 'rgba(0,180,70,0.45)',
-  warn: 'rgba(255,200,0,0.7)',
-  err:  'rgba(255,70,70,0.8)',
+  sys:  'rgba(0,255,100,0.6)',
+  ok:   'rgba(0,230,90,0.85)',
+  info: 'rgba(0,190,75,0.45)',
+  warn: 'rgba(255,210,0,0.72)',
+  err:  'rgba(255,75,75,0.82)',
 };
 
 let content = '', lineIdx = 0, charIdx = 0;
@@ -356,10 +402,10 @@ function termTick() {
     content += `<span style="color:${col}">> ${line.tx}</span><br>`;
     lineIdx++; charIdx = 0;
     const brs = content.split('<br>');
-    if (brs.length > 42) content = brs.slice(brs.length - 32).join('<br>') + '<br>';
+    if (brs.length > 46) content = brs.slice(brs.length - 34).join('<br>') + '<br>';
   }
 }
-setInterval(termTick, 24);
+setInterval(termTick, 22);
 </script>
 </body>
 </html>
