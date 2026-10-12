@@ -9,31 +9,44 @@
 
 body{
   min-height:100vh;
-  background:#050508;
+  background:#050a06;
   font-family:'Segoe UI',Arial,sans-serif;
   display:flex;align-items:center;justify-content:center;
   overflow:hidden;position:relative;
 }
 
-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-
+/* Scanline overlay */
 body::after{
   content:'';position:fixed;inset:0;
   background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.05) 2px,rgba(0,0,0,0.05) 4px);
   pointer-events:none;z-index:2;
 }
 
+/* Grid background */
 .grid-bg{
   position:fixed;inset:0;z-index:1;
   background-image:
-    linear-gradient(rgba(255,0,85,0.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,0,85,0.025) 1px,transparent 1px);
+    linear-gradient(rgba(0,255,100,0.02) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,100,0.02) 1px,transparent 1px);
   background-size:44px 44px;
   animation:gridDrift 20s linear infinite;
 }
 @keyframes gridDrift{
   0%{background-position:0 0}
   100%{background-position:44px 44px}
+}
+
+/* Terminal background */
+.term-bg{
+  position:fixed;inset:0;z-index:1;
+  overflow:hidden;
+  padding:10px 14px;
+  font-size:9.5px;
+  line-height:1.6;
+  font-family:'Courier New',monospace;
+  pointer-events:none;
+  word-break:break-all;
+  opacity:0.22;
 }
 
 .wrap{
@@ -43,24 +56,7 @@ body::after{
   padding:20px;
 }
 
-/* Staggered entrance */
-.badge{
-  opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
-  display:inline-flex;align-items:center;gap:7px;
-  font-size:9.5px;font-weight:700;
-  padding:5px 14px;border-radius:20px;
-  margin-bottom:36px;letter-spacing:1.4px;text-transform:uppercase;
-  background:rgba(255,0,85,0.06);
-  color:rgba(255,0,85,0.65);
-  border:1px solid rgba(255,0,85,0.12);
-}
-.badge-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:#ff0055;box-shadow:0 0 8px #ff0055;
-  animation:pulse 1.6s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.7)}}
-
+/* Ring */
 .ring-wrap{
   opacity:0;animation:scaleIn 0.7s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
   width:150px;height:150px;
@@ -72,31 +68,31 @@ body::after{
 .ring1{
   position:absolute;inset:0;border-radius:50%;
   border:2.5px solid transparent;
-  border-top-color:#ff0055;
-  border-right-color:rgba(255,0,85,0.25);
+  border-top-color:#00ff64;
+  border-right-color:rgba(0,255,100,0.25);
   animation:r1 1.8s linear infinite;
   transform-style:preserve-3d;
-  filter:drop-shadow(0 0 10px #ff0055);
+  filter:drop-shadow(0 0 10px #00ff64);
 }
 .ring2{
   position:absolute;inset:14px;border-radius:50%;
   border:2px solid transparent;
-  border-bottom-color:rgba(255,0,85,0.55);
-  border-left-color:rgba(255,0,85,0.2);
+  border-bottom-color:rgba(0,255,100,0.55);
+  border-left-color:rgba(0,255,100,0.2);
   animation:r2 1.3s linear infinite;
   transform-style:preserve-3d;
-  filter:drop-shadow(0 0 6px rgba(255,0,85,0.4));
+  filter:drop-shadow(0 0 6px rgba(0,255,100,0.4));
 }
 .ring3{
   position:absolute;inset:28px;border-radius:50%;
   border:1.5px solid transparent;
-  border-top-color:rgba(255,0,85,0.3);
+  border-top-color:rgba(0,255,100,0.3);
   animation:r3 2.4s linear infinite reverse;
   transform-style:preserve-3d;
 }
 .ring4{
   position:absolute;inset:5px;border-radius:50%;
-  border:1px solid rgba(255,0,85,0.06);
+  border:1px solid rgba(0,255,100,0.06);
   animation:breathe 3s ease-in-out infinite;
 }
 @keyframes r1{0%{transform:rotateX(65deg) rotateZ(0deg)}100%{transform:rotateX(65deg) rotateZ(360deg)}}
@@ -106,7 +102,7 @@ body::after{
 
 .ring-wrap::before{
   content:'';position:absolute;inset:15px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,0,85,0.1) 0%,transparent 70%);
+  background:radial-gradient(circle,rgba(0,255,100,0.1) 0%,transparent 70%);
   animation:breathe 3s ease-in-out infinite;
 }
 
@@ -116,48 +112,60 @@ body::after{
 }
 .ic{
   width:38px;height:38px;fill:none;
-  stroke:#ff0055;stroke-width:1.8;
+  stroke:#00ff64;stroke-width:1.8;
   stroke-linecap:round;stroke-linejoin:round;
-  filter:drop-shadow(0 0 10px rgba(255,0,85,0.7));
+  filter:drop-shadow(0 0 10px rgba(0,255,100,0.7));
   animation:iconPulse 2s ease-in-out infinite;
 }
-@keyframes iconPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(255,0,85,0.6))}50%{filter:drop-shadow(0 0 18px rgba(255,0,85,0.9))}}
+@keyframes iconPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(0,255,100,0.6))}50%{filter:drop-shadow(0 0 18px rgba(0,255,100,0.9))}}
 
+/* Title with glitch */
 .title{
   opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards;
   font-size:26px;font-weight:800;
   margin-bottom:12px;letter-spacing:-0.5px;
-  color:#ff0055;
-  text-shadow:0 0 30px rgba(255,0,85,0.5),0 0 60px rgba(255,0,85,0.2);
+  color:#00ff64;
+  text-shadow:0 0 30px rgba(0,255,100,0.5),0 0 60px rgba(0,255,100,0.2);
 }
 .title.glitch{animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.4s forwards,glitch 4s ease-in-out 1.5s infinite}
 @keyframes glitch{
-  0%,90%,100%{text-shadow:0 0 30px rgba(255,0,85,0.5),0 0 60px rgba(255,0,85,0.2);transform:translate(0)}
-  92%{text-shadow:-2px 0 rgba(0,255,200,0.5),2px 0 rgba(255,0,85,0.5);transform:translate(-1px,0)}
-  94%{text-shadow:2px 0 rgba(0,255,200,0.5),-2px 0 rgba(255,0,85,0.5);transform:translate(1px,0)}
-  96%{text-shadow:0 0 30px rgba(255,0,85,0.5);transform:translate(0)}
+  0%,90%,100%{
+    text-shadow:0 0 30px rgba(0,255,100,0.5),0 0 60px rgba(0,255,100,0.2);
+    transform:translate(0);
+  }
+  92%{
+    text-shadow:-3px 0 rgba(0,200,255,0.6),3px 0 rgba(255,0,100,0.5),0 0 30px rgba(0,255,100,0.4);
+    transform:translate(-2px,0);
+  }
+  94%{
+    text-shadow:3px 0 rgba(0,200,255,0.6),-3px 0 rgba(255,0,100,0.5),0 0 30px rgba(0,255,100,0.4);
+    transform:translate(2px,0);
+  }
+  96%{
+    text-shadow:0 0 30px rgba(0,255,100,0.5);
+    transform:translate(0);
+  }
 }
 
 .subtitle{
   opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.55s forwards;
   font-size:13.5px;color:rgba(255,255,255,0.32);
-  margin-bottom:36px;line-height:1.9;font-weight:400;
+  margin-bottom:28px;line-height:1.9;font-weight:400;
 }
 
+/* Buttons */
 .btn-wrap{
   opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
-  position:relative;display:inline-block;
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
 }
+
 .btn{
   display:inline-flex;align-items:center;gap:9px;
-  text-decoration:none;font-size:13.5px;font-weight:700;
-  padding:14px 32px;border-radius:12px;
-  color:#fff;letter-spacing:0.4px;
-  background:linear-gradient(135deg,#cc0044,#ff0055);
-  border:1px solid rgba(255,0,85,0.25);
+  text-decoration:none;font-size:13px;font-weight:700;
+  padding:13px 24px;border-radius:12px;
+  color:#fff;letter-spacing:0.3px;
   cursor:pointer;position:relative;overflow:hidden;
   transition:all 0.25s;
-  box-shadow:0 4px 24px rgba(255,0,85,0.3),inset 0 1px 0 rgba(255,255,255,0.08);
 }
 .btn::before{
   content:'';position:absolute;top:0;left:-100%;
@@ -166,8 +174,22 @@ body::after{
   animation:shimmer 3s ease-in-out 2s infinite;
 }
 @keyframes shimmer{0%{left:-100%}100%{left:200%}}
-.btn:hover{box-shadow:0 6px 36px rgba(255,0,85,0.5);transform:translateY(-2px)}
-.btn:active{transform:translateY(0);box-shadow:0 2px 12px rgba(255,0,85,0.3)}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+
+.btn-tg{
+  background:linear-gradient(135deg,#0077b5,#229ed9);
+  border:1px solid rgba(34,158,217,0.3);
+  box-shadow:0 4px 20px rgba(34,158,217,0.25);
+}
+.btn-tg:hover{box-shadow:0 6px 30px rgba(34,158,217,0.45)}
+
+.btn-yt{
+  background:linear-gradient(135deg,#c4302b,#ff0000);
+  border:1px solid rgba(255,0,0,0.3);
+  box-shadow:0 4px 20px rgba(255,0,0,0.22);
+}
+.btn-yt:hover{box-shadow:0 6px 30px rgba(255,0,0,0.4)}
 
 /* Ripple */
 .ripple{
@@ -178,24 +200,28 @@ body::after{
 }
 @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
 
+/* Footer */
 .footer{
   opacity:0;animation:slideUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.85s forwards;
-  margin-top:32px;font-size:9.5px;
-  color:rgba(255,0,85,0.2);
-  letter-spacing:2px;font-weight:600;
-  text-shadow:0 0 10px rgba(255,0,85,0.15);
+  margin-top:30px;
+  font-size:9px;font-weight:700;
+  color:rgba(0,255,100,0.3);
+  letter-spacing:3px;
+  font-family:'Courier New',monospace;
+  border-top:1px solid rgba(0,255,100,0.1);
+  padding-top:14px;
+  text-shadow:0 0 10px rgba(0,255,100,0.2);
 }
 
 @keyframes slideUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+
 <div class="grid-bg"></div>
+<div class="term-bg" id="termBg"></div>
 
 <div class="wrap">
-  <div class="badge"><div class="badge-dot"></div>ZOLAMAUTH</div>
-
   <div class="ring-wrap">
     <div class="ring1"></div>
     <div class="ring2"></div>
@@ -208,118 +234,132 @@ body::after{
   <div class="subtitle" id="subtitle">Your access has expired.<br>Please contact admin to renew.</div>
 
   <div class="btn-wrap">
-    <a class="btn" id="btn" href="https://t.me/freefilebd">
+    <a class="btn btn-tg" id="btnTg" href="https://t.me/freefilebd">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-      <span id="btnText">Contact Admin</span>
+      Telegram
+    </a>
+    <a class="btn btn-yt" id="btnYt" href="https://youtube.com/@zolamff">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      YouTube
     </a>
   </div>
 
-  <div class="footer">PROTECTED BY ZOLAM AUTH</div>
+  <div class="footer">— PROTECTED BY ZOLAM AUTH —</div>
 </div>
 
 <script>
-const params=new URLSearchParams(window.location.search);
-const s=params.get('s')||'error';
+// State config
+const params = new URLSearchParams(window.location.search);
+const s = params.get('s') || 'expired';
 
-const icons={
-  shield:`<svg class="ic" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
-  wifi:`<svg class="ic" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>`,
-  update:`<svg class="ic" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
-  lock:`<svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-  key:`<svg class="ic" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
-  x:`<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+const icons = {
+  shield: `<svg class="ic" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  wifi:   `<svg class="ic" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>`,
+  update: `<svg class="ic" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
+  lock:   `<svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  key:    `<svg class="ic" viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`,
+  x:      `<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
 };
 
-const cfg={
-  offline:     {icon:icons.wifi,  title:'Server Offline',  sub:'The server is currently offline.<br>Please try again later.',       btn:'Try Again'},
-  network:     {icon:icons.wifi,  title:'Network Error',   sub:'Please check your internet<br>connection and try again.',            btn:'Retry'},
-  tokenexpired:{icon:icons.update,title:'Update Required', sub:'Server requires a bypass update.<br>Contact your admin to proceed.', btn:'Contact Admin'},
-  expired:     {icon:icons.lock,  title:'Access Expired',  sub:'Your access has expired.<br>Please contact admin to renew.',         btn:'Contact Admin'},
-  notfound:    {icon:icons.key,   title:'Not Registered',  sub:'Your device is not registered.<br>Contact admin to get access.',     btn:'Get Access'},
-  error:       {icon:icons.x,     title:'Auth Failed',     sub:'Failed to verify your device.<br>Please restart the game.',          btn:'Contact Admin'},
+const cfg = {
+  offline:      { icon: icons.wifi,   title: 'Server Offline',  sub: 'The server is currently offline.<br>Please try again later.' },
+  network:      { icon: icons.wifi,   title: 'Network Error',   sub: 'Please check your internet<br>connection and try again.' },
+  tokenexpired: { icon: icons.update, title: 'Update Required', sub: 'Server requires a bypass update.<br>Contact your admin to proceed.' },
+  expired:      { icon: icons.lock,   title: 'Access Expired',  sub: 'Your access has expired.<br>Please contact admin to renew.' },
+  notfound:     { icon: icons.key,    title: 'Not Registered',  sub: 'Your device is not registered.<br>Contact admin to get access.' },
+  error:        { icon: icons.x,      title: 'Auth Failed',     sub: 'Failed to verify your device.<br>Please restart the game.' },
 };
 
-const c=cfg[s]||cfg.error;
-document.getElementById('iconCore').innerHTML=c.icon;
-document.getElementById('title').textContent=c.title;
-document.getElementById('subtitle').innerHTML=c.sub;
-document.getElementById('btnText').textContent=c.btn;
+const c = cfg[s] || cfg.error;
+document.getElementById('iconCore').innerHTML = c.icon;
+document.getElementById('subtitle').innerHTML = c.sub;
 
-// Ripple effect
-document.getElementById('btn').addEventListener('click',function(e){
-  const r=document.createElement('span');
-  r.classList.add('ripple');
-  const rect=this.getBoundingClientRect();
-  const size=Math.max(rect.width,rect.height);
-  r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
-  this.appendChild(r);
-  setTimeout(()=>r.remove(),500);
-});
-
-// Typewriter for title
-const titleEl=document.getElementById('title');
-const originalText=c.title;
-setTimeout(()=>{
-  titleEl.textContent='';
-  let i=0;
-  const type=()=>{
-    if(i<originalText.length){
-      titleEl.textContent+=originalText[i++];
-      setTimeout(type,60);
+// Typewriter title
+const titleEl = document.getElementById('title');
+setTimeout(() => {
+  titleEl.textContent = '';
+  let i = 0;
+  const type = () => {
+    if (i < c.title.length) {
+      titleEl.textContent += c.title[i++];
+      setTimeout(type, 55);
     }
   };
   type();
-},400);
+}, 400);
 
-// Canvas
-const canvas=document.getElementById('c');
-const ctx=canvas.getContext('2d');
-let W,H,pts=[];
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
-resize();window.addEventListener('resize',resize);
-
-for(let i=0;i<55;i++){
-  pts.push({
-    x:Math.random()*window.innerWidth,
-    y:Math.random()*window.innerHeight,
-    r:Math.random()*1.1+0.2,
-    vx:(Math.random()-0.5)*0.22,
-    vy:(Math.random()-0.5)*0.22,
-    a:Math.random()*0.28+0.05
+// Ripple on buttons
+[document.getElementById('btnTg'), document.getElementById('btnYt')].forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const r = document.createElement('span');
+    r.classList.add('ripple');
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px`;
+    this.appendChild(r);
+    setTimeout(() => r.remove(), 500);
   });
-}
+});
 
-function draw(){
-  ctx.clearRect(0,0,W,H);
-  const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.6);
-  g.addColorStop(0,'rgba(255,0,85,0.07)');
-  g.addColorStop(1,'transparent');
-  ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+// Terminal background typewriter
+const termEl = document.getElementById('termBg');
+const termLines = [
+  { t: 'sys',  tx: 'ZOLAM_AUTH v2.4.1 :: INITIALIZING...' },
+  { t: 'ok',   tx: '[SYS] Loading kernel modules... OK' },
+  { t: 'ok',   tx: '[NET] Establishing secure tunnel... DONE' },
+  { t: 'info', tx: 'AUTH_CHECK :: device_id=0xA3F2C1D9' },
+  { t: 'info', tx: '[SCAN] Verifying token integrity...' },
+  { t: 'info', tx: 'TOKEN_HASH: 8f3a2b1c9d4e5f6a7b8c' },
+  { t: 'warn', tx: '[WARN] Session expired at 1728757200' },
+  { t: 'err',  tx: 'STATUS :: ACCESS_DENIED' },
+  { t: 'err',  tx: '[ERR] 0x403 :: Unauthorized device' },
+  { t: 'err',  tx: 'Checking bypass modules... FAILED' },
+  { t: 'info', tx: '[LOG] ip=192.168.1.x port=8443' },
+  { t: 'info', tx: 'ssl_cert: ZolamFF_ROOT_CA.pem' },
+  { t: 'warn', tx: '[NET] ping 10.0.0.1 ... timeout' },
+  { t: 'err',  tx: 'reauth_attempt: 3/3 FAILED' },
+  { t: 'sys',  tx: '[SYS] Dumping stack trace...' },
+  { t: 'info', tx: 'at AuthModule.verify (auth.js:142)' },
+  { t: 'info', tx: 'at TokenValidator.check (token.js:88)' },
+  { t: 'warn', tx: '[DB] SELECT * FROM users WHERE id=?' },
+  { t: 'err',  tx: 'query_result: 0 rows' },
+  { t: 'ok',   tx: '[CRYPT] AES-256-GCM decrypt... OK' },
+  { t: 'err',  tx: 'sig_verify: RSA-4096 MISMATCH' },
+  { t: 'err',  tx: '[SEC] Firewall rule #44 triggered' },
+  { t: 'err',  tx: 'BLOCK :: reason=expired_license' },
+  { t: 'ok',   tx: '[MOD] ZolamFF protection active' },
+  { t: 'info', tx: 'youtube: @zolamff' },
+  { t: 'info', tx: 'contact: t.me/freefilebd' },
+  { t: 'sys',  tx: 'ZOLAM_AUTH :: session terminated.' },
+  { t: 'sys',  tx: '----------------------------------------' },
+];
 
-  pts.forEach(p=>{
-    p.x+=p.vx;p.y+=p.vy;
-    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
-    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(255,0,85,${p.a})`;ctx.fill();
-  });
+const termColors = {
+  sys:  'rgba(0,255,100,0.55)',
+  ok:   'rgba(0,220,80,0.8)',
+  info: 'rgba(0,180,70,0.45)',
+  warn: 'rgba(255,200,0,0.7)',
+  err:  'rgba(255,70,70,0.8)',
+};
 
-  for(let i=0;i<pts.length;i++){
-    for(let j=i+1;j<pts.length;j++){
-      const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
-      const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<85){
-        ctx.beginPath();
-        ctx.moveTo(pts[i].x,pts[i].y);
-        ctx.lineTo(pts[j].x,pts[j].y);
-        ctx.strokeStyle=`rgba(255,0,85,${0.06*(1-d/85)})`;
-        ctx.lineWidth=0.5;ctx.stroke();
-      }
-    }
+let content = '', lineIdx = 0, charIdx = 0;
+function termTick() {
+  if (lineIdx >= termLines.length) { lineIdx = 0; content = ''; charIdx = 0; }
+  const line = termLines[lineIdx];
+  const full = '> ' + line.tx;
+  const col = termColors[line.t];
+  if (charIdx <= full.length) {
+    const partial = full.slice(0, charIdx) + (charIdx < full.length ? '█' : '');
+    termEl.innerHTML = content + `<span style="color:${col}">${partial}</span>`;
+    charIdx++;
+  } else {
+    content += `<span style="color:${col}">> ${line.tx}</span><br>`;
+    lineIdx++; charIdx = 0;
+    const brs = content.split('<br>');
+    if (brs.length > 42) content = brs.slice(brs.length - 32).join('<br>') + '<br>';
   }
-  requestAnimationFrame(draw);
 }
-draw();
+setInterval(termTick, 24);
 </script>
 </body>
 </html>
