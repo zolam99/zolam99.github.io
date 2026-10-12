@@ -2,28 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ZolamAuth</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#030d05;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;}
+html,body{height:100%;background:#000000;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;}
 body{display:flex;align-items:center;justify-content:center;position:relative;}
-
-body::after{
-  content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);
-  pointer-events:none;z-index:2;
-}
-
-.grid-bg{
-  position:fixed;inset:0;z-index:0;
-  background-image:
-    linear-gradient(rgba(0,255,100,0.012) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,100,0.012) 1px,transparent 1px);
-  background-size:48px 48px;
-  animation:gridDrift 32s linear infinite;
-}
-@keyframes gridDrift{to{background-position:48px 48px}}
 
 /* Particle canvas */
 #particles{position:fixed;inset:0;z-index:0;pointer-events:none;}
@@ -31,20 +15,10 @@ body::after{
 /* Deep ambient */
 .ambient{
   position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 50% 40% at 50% 44%,rgba(0,255,100,0.06) 0%,transparent 65%);
+  background:radial-gradient(ellipse 50% 40% at 50% 44%,rgba(0,255,100,0.05) 0%,transparent 65%);
   animation:ambPulse 5s ease-in-out infinite;
 }
 @keyframes ambPulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
-
-/* Terminal */
-.term-bg{
-  position:fixed;inset:0;z-index:0;overflow:hidden;
-  padding:12px 16px;font-size:9px;line-height:1.7;
-  font-family:'Courier New',monospace;
-  pointer-events:none;word-break:break-all;
-  opacity:0;transition:opacity 1.4s ease;
-}
-.term-bg.on{opacity:0.13}
 
 /* Main wrap */
 .wrap{
@@ -185,7 +159,6 @@ body::after{
   87%{text-shadow:3px 0 rgba(0,210,255,0.8),-3px 0 rgba(255,0,100,0.6);transform:translate(2px,0)}
   88%{text-shadow:-1px 0 rgba(0,210,255,0.5),1px 0 rgba(255,0,100,0.4);transform:translate(-1px,0)}
   89%{text-shadow:0 0 20px rgba(0,255,100,0.45);transform:translate(0)}
-  /* Rapid double glitch */
   91%{text-shadow:-2px 0 rgba(0,210,255,0.6),2px 0 rgba(255,0,100,0.4);transform:translate(-1px,0)}
   92%{text-shadow:0 0 20px rgba(0,255,100,0.45);transform:translate(0)}
 }
@@ -269,10 +242,8 @@ body::after{
 </head>
 <body>
 
-<div class="grid-bg"></div>
 <div class="ambient"></div>
 <canvas id="particles"></canvas>
-<div class="term-bg" id="termBg"></div>
 
 <div class="wrap">
   <div class="ring-wrap">
@@ -344,18 +315,13 @@ function drawParticles() {
     p.y += p.vy;
     p.flicker += p.flickerSpeed;
     const a = p.alpha * (0.6 + 0.4 * Math.sin(p.flicker));
-
-    // Wrap
     if (p.y < -4) p.y = H + 4;
     if (p.x < -4) p.x = W + 4;
     if (p.x > W + 4) p.x = -4;
-
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(0,255,100,${a.toFixed(3)})`;
     ctx.fill();
-
-    // Occasional glow dot
     if (p.r > 1.0) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
@@ -414,41 +380,6 @@ document.querySelectorAll('.btn').forEach(btn => {
     setTimeout(() => r.remove(), 620);
   });
 });
-
-// Terminal
-setTimeout(() => document.getElementById('termBg').classList.add('on'), 1000);
-const termEl = document.getElementById('termBg');
-const lines = [
-  {t:'sys',tx:'ZOLAM_AUTH v2.4.1 :: INITIALIZING...'},
-  {t:'ok', tx:'[SYS] Loading kernel modules... OK'},
-  {t:'ok', tx:'[NET] Establishing secure tunnel... DONE'},
-  {t:'info',tx:'AUTH_CHECK :: device_id=0xA3F2C1D9B8E7'},
-  {t:'info',tx:'[SCAN] Verifying token integrity...'},
-  {t:'warn',tx:'[WARN] Session expired :: ts=1728757200'},
-  {t:'err', tx:'STATUS :: ACCESS_DENIED'},
-  {t:'err', tx:'[ERR] 0x403 :: Unauthorized device'},
-  {t:'err', tx:'Checking bypass modules... FAILED'},
-  {t:'info',tx:'[LOG] ip=192.168.1.x port=8443 proto=TLS'},
-  {t:'warn',tx:'[NET] ping 10.0.0.1 ... timeout (3000ms)'},
-  {t:'err', tx:'reauth_attempt: 3/3 FAILED'},
-  {t:'ok',  tx:'[CRYPT] AES-256-GCM init... OK'},
-  {t:'err', tx:'sig_verify: RSA-4096 MISMATCH'},
-  {t:'ok',  tx:'[MOD] ZolamFF protection layer ACTIVE'},
-  {t:'sys', tx:'ZOLAM_AUTH :: session terminated.'},
-  {t:'sys', tx:'════════════════════════════════'},
-];
-const col = {sys:'rgba(0,255,100,0.6)',ok:'rgba(0,230,90,0.85)',info:'rgba(0,190,75,0.45)',warn:'rgba(255,210,0,0.72)',err:'rgba(255,75,75,0.82)'};
-let buf='',li=0,ci=0;
-setInterval(()=>{
-  if(li>=lines.length){li=0;buf='';ci=0;}
-  const ln=lines[li],full='> '+ln.tx,c2=col[ln.t];
-  if(ci<=full.length){
-    termEl.innerHTML=buf+`<span style="color:${c2}">${full.slice(0,ci)+(ci<full.length?'█':'')}</span>`;ci++;
-  } else {
-    buf+=`<span style="color:${c2}">> ${ln.tx}</span><br>`;li++;ci=0;
-    const p=buf.split('<br>');if(p.length>50)buf=p.slice(p.length-36).join('<br>')+'<br>';
-  }
-},22);
 </script>
 </body>
 </html>
