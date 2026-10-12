@@ -6,313 +6,286 @@
 <title>ZolamAuth</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
-body{
-  min-height:100vh;
-  background:#050a06;
-  font-family:'Segoe UI',Arial,sans-serif;
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;position:relative;
-}
+html,body{height:100%;background:#030d05;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;}
+body{display:flex;align-items:center;justify-content:center;position:relative;}
 
 body::after{
   content:'';position:fixed;inset:0;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);
   pointer-events:none;z-index:2;
 }
 
 .grid-bg{
-  position:fixed;inset:0;z-index:1;
+  position:fixed;inset:0;z-index:0;
   background-image:
-    linear-gradient(rgba(0,255,100,0.015) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,100,0.015) 1px,transparent 1px);
-  background-size:44px 44px;
-  animation:gridDrift 28s linear infinite;
+    linear-gradient(rgba(0,255,100,0.012) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,100,0.012) 1px,transparent 1px);
+  background-size:48px 48px;
+  animation:gridDrift 32s linear infinite;
 }
-@keyframes gridDrift{to{background-position:44px 44px}}
+@keyframes gridDrift{to{background-position:48px 48px}}
 
+/* Particle canvas */
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* Deep ambient */
+.ambient{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 50% 40% at 50% 44%,rgba(0,255,100,0.06) 0%,transparent 65%);
+  animation:ambPulse 5s ease-in-out infinite;
+}
+@keyframes ambPulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
+
+/* Terminal */
 .term-bg{
-  position:fixed;inset:0;z-index:1;
-  overflow:hidden;padding:12px 16px;
-  font-size:9.5px;line-height:1.65;
+  position:fixed;inset:0;z-index:0;overflow:hidden;
+  padding:12px 16px;font-size:9px;line-height:1.7;
   font-family:'Courier New',monospace;
   pointer-events:none;word-break:break-all;
-  opacity:0;
-  transition:opacity 1.2s ease;
+  opacity:0;transition:opacity 1.4s ease;
 }
-.term-bg.visible{opacity:0.18;}
+.term-bg.on{opacity:0.13}
 
-/* Ambient glow */
-.ambient{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(ellipse 60% 55% at 50% 50%, rgba(0,255,100,0.04) 0%, transparent 70%);
-  animation:ambientPulse 4s ease-in-out infinite;
-}
-@keyframes ambientPulse{
-  0%,100%{opacity:0.6;transform:scale(1)}
-  50%{opacity:1;transform:scale(1.05)}
-}
-
+/* Main wrap */
 .wrap{
-  position:relative;z-index:3;
-  text-align:center;
-  width:92%;max-width:380px;
-  padding:48px 32px 40px;
-  opacity:0;
-  animation:wrapIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+  position:relative;z-index:3;text-align:center;
+  width:88%;max-width:360px;padding:0 24px;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;animation:wrapIn 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
 }
-@keyframes wrapIn{
-  0%{opacity:0;transform:translateY(32px) scale(0.96)}
-  100%{opacity:1;transform:translateY(0) scale(1)}
-}
+@keyframes wrapIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:none}}
 
-/* Ring system */
+/* ── Ring system ── */
 .ring-wrap{
-  opacity:0;
-  animation:scaleIn 0.9s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-  width:150px;height:150px;
-  margin:0 auto 44px;
-  position:relative;perspective:500px;
+  width:168px;height:168px;margin-bottom:38px;
+  position:relative;flex-shrink:0;
+  opacity:0;animation:ringIn 1s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
 }
-@keyframes scaleIn{
-  0%{opacity:0;transform:scale(0.5) translateY(10px)}
-  100%{opacity:1;transform:scale(1) translateY(0)}
+@keyframes ringIn{from{opacity:0;transform:scale(0.4)}to{opacity:1;transform:scale(1)}}
+
+/* Outer pulse rings */
+.pr{
+  position:absolute;border-radius:50%;border:1px solid rgba(0,255,100,0.2);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.pr1{width:100%;height:100%;animation:prOut 2.8s ease-out infinite;}
+.pr2{width:130%;height:130%;border-color:rgba(0,255,100,0.09);animation:prOut 2.8s ease-out 1.4s infinite;}
+.pr3{width:160%;height:160%;border-color:rgba(0,255,100,0.04);animation:prOut 2.8s ease-out 0.7s infinite;}
+@keyframes prOut{
+  0%{transform:translate(-50%,-50%) scale(0.82);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1.1);opacity:0}
 }
 
-.ring1{
-  position:absolute;inset:0;border-radius:50%;
-  border:2px solid transparent;
+/* Arc rings */
+.arc{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;}
+
+.arc1{
   border-top-color:#00ff64;
-  border-right-color:rgba(0,255,100,0.15);
-  animation:r1 2.2s cubic-bezier(0.4,0,0.6,1) infinite;
-  transform-style:preserve-3d;
-  filter:drop-shadow(0 0 10px rgba(0,255,100,0.75));
-}
-.ring2{
-  position:absolute;inset:14px;border-radius:50%;
-  border:1.5px solid transparent;
-  border-bottom-color:rgba(0,255,100,0.55);
-  border-left-color:rgba(0,255,100,0.12);
-  animation:r2 1.6s cubic-bezier(0.4,0,0.6,1) infinite;
-  transform-style:preserve-3d;
-  filter:drop-shadow(0 0 6px rgba(0,255,100,0.4));
-}
-.ring3{
-  position:absolute;inset:28px;border-radius:50%;
-  border:1px solid transparent;
-  border-top-color:rgba(0,255,100,0.22);
   border-right-color:rgba(0,255,100,0.08);
-  animation:r3 3s cubic-bezier(0.4,0,0.6,1) infinite reverse;
+  animation:spin1 1.6s linear infinite, flicker1 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 8px #00ff64) drop-shadow(0 0 16px rgba(0,255,100,0.4));
 }
-.ring4{
-  position:absolute;inset:5px;border-radius:50%;
-  border:1px solid rgba(0,255,100,0.04);
-  animation:breathe 3.5s ease-in-out infinite;
-}
-
-/* Pulse rings */
-.pulse1,.pulse2{
-  position:absolute;border-radius:50%;
-  border:1px solid rgba(0,255,100,0.12);
-  animation:pulseOut 3s ease-out infinite;
-}
-.pulse1{inset:-16px;}
-.pulse2{inset:-32px;animation-delay:1.5s;border-color:rgba(0,255,100,0.06);}
-
-@keyframes pulseOut{
-  0%{transform:scale(0.9);opacity:0.8}
-  70%{opacity:0}
-  100%{transform:scale(1.1);opacity:0}
-}
-@keyframes r1{to{transform:rotateX(68deg) rotateZ(360deg)}}
-@keyframes r2{to{transform:rotateX(68deg) rotateZ(360deg)}}
-@keyframes r3{to{transform:rotateX(68deg) rotateZ(360deg)}}
-@keyframes breathe{
-  0%,100%{transform:scale(1);opacity:0.4}
-  50%{transform:scale(1.08);opacity:0.9}
+@keyframes flicker1{
+  0%,100%{filter:drop-shadow(0 0 8px #00ff64) drop-shadow(0 0 16px rgba(0,255,100,0.4));opacity:1}
+  18%{filter:drop-shadow(0 0 3px #00ff64);opacity:0.6}
+  20%{filter:drop-shadow(0 0 14px #00ff64) drop-shadow(0 0 28px rgba(0,255,100,0.6));opacity:1}
+  55%{filter:drop-shadow(0 0 10px #00ff64) drop-shadow(0 0 20px rgba(0,255,100,0.5));opacity:1}
+  57%{filter:drop-shadow(0 0 2px #00ff64);opacity:0.5}
+  59%{filter:drop-shadow(0 0 12px #00ff64) drop-shadow(0 0 24px rgba(0,255,100,0.55));opacity:1}
 }
 
-.ring-wrap::before{
-  content:'';position:absolute;inset:16px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,255,100,0.08) 0%,transparent 68%);
-  animation:breathe 3.5s ease-in-out infinite;
+.arc2{
+  inset:15px;
+  border-bottom-color:rgba(0,255,100,0.65);
+  border-left-color:rgba(0,255,100,0.08);
+  animation:spin2 1.1s linear infinite, flicker2 6s ease-in-out 1s infinite;
+  filter:drop-shadow(0 0 5px rgba(0,255,100,0.55));
+}
+@keyframes flicker2{
+  0%,100%{filter:drop-shadow(0 0 5px rgba(0,255,100,0.55));opacity:1}
+  40%{filter:drop-shadow(0 0 1px rgba(0,255,100,0.3));opacity:0.55}
+  42%{filter:drop-shadow(0 0 8px rgba(0,255,100,0.7));opacity:1}
 }
 
-.icon-core{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
+.arc3{
+  inset:30px;
+  border-right-color:rgba(0,255,100,0.3);
+  border-bottom-color:rgba(0,255,100,0.08);
+  animation:spin3 2.4s linear infinite reverse;
+  filter:drop-shadow(0 0 3px rgba(0,255,100,0.3));
 }
+
+.arc4{
+  inset:6px;border-color:rgba(0,255,100,0.03);
+  animation:breathe 4s ease-in-out infinite;
+}
+
+/* Electric arc dash */
+.arc-dash{
+  position:absolute;inset:0;border-radius:50%;
+  border:1.5px dashed rgba(0,255,100,0.0);
+  animation:dashAppear 3.5s ease-in-out infinite;
+}
+@keyframes dashAppear{
+  0%,40%,100%{border-color:rgba(0,255,100,0.0);transform:rotate(0deg)}
+  45%{border-color:rgba(0,255,100,0.35);transform:rotate(15deg)}
+  50%{border-color:rgba(0,255,100,0.55);transform:rotate(25deg)}
+  55%{border-color:rgba(0,255,100,0.3);transform:rotate(40deg)}
+  60%{border-color:rgba(0,255,100,0.0);transform:rotate(55deg)}
+}
+
+@keyframes spin1{to{transform:rotate(360deg)}}
+@keyframes spin2{to{transform:rotate(360deg)}}
+@keyframes spin3{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(1.08);opacity:0.9}}
+
+/* Glow disc */
+.glow-disc{
+  position:absolute;top:50%;left:50%;
+  width:55%;height:55%;transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,255,100,0.12) 0%,rgba(0,255,100,0.04) 50%,transparent 70%);
+  animation:glowDisc 3.5s ease-in-out infinite;
+}
+@keyframes glowDisc{
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.7}
+  50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
+}
+
+/* Icon */
+.icon-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
 .ic{
   width:34px;height:34px;fill:none;
   stroke:#00ff64;stroke-width:1.6;
   stroke-linecap:round;stroke-linejoin:round;
-  animation:iconPulse 2.8s ease-in-out infinite;
-  transition:stroke 0.4s ease, opacity 0.3s ease;
+  animation:iconGlow 2.8s ease-in-out infinite, iconFlicker 5s ease-in-out 1s infinite;
 }
-@keyframes iconPulse{
-  0%,100%{filter:drop-shadow(0 0 7px rgba(0,255,100,0.5));opacity:0.9}
-  50%{filter:drop-shadow(0 0 18px rgba(0,255,100,0.9));opacity:1}
+@keyframes iconGlow{
+  0%,100%{filter:drop-shadow(0 0 5px rgba(0,255,100,0.6));opacity:0.88}
+  50%{filter:drop-shadow(0 0 14px rgba(0,255,100,1)) drop-shadow(0 0 24px rgba(0,255,100,0.5));opacity:1}
+}
+@keyframes iconFlicker{
+  0%,100%{opacity:1}
+  30%{opacity:0.7}
+  32%{opacity:1}
+  65%{opacity:0.65}
+  67%{opacity:1}
 }
 
 /* Title */
 .title{
-  opacity:0;
-  animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
-  font-size:26px;font-weight:800;
-  margin-bottom:14px;letter-spacing:-0.4px;
-  color:#00ff64;
-  text-shadow:0 0 24px rgba(0,255,100,0.4),0 0 50px rgba(0,255,100,0.12);
-  min-height:34px;
+  font-size:26px;font-weight:800;letter-spacing:-0.3px;
+  color:#00ff64;min-height:34px;margin-bottom:10px;
+  text-shadow:0 0 20px rgba(0,255,100,0.45),0 0 40px rgba(0,255,100,0.15);
+  opacity:0;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
 }
 @keyframes glitch{
-  0%,85%,100%{
-    text-shadow:0 0 24px rgba(0,255,100,0.4),0 0 50px rgba(0,255,100,0.12);
-    transform:translate(0);clip-path:none;
-  }
-  87%{
-    text-shadow:-3px 0 rgba(0,200,255,0.7),3px 0 rgba(255,0,120,0.55);
-    transform:translate(-2px,0);
-  }
-  89%{
-    text-shadow:3px 0 rgba(0,200,255,0.7),-3px 0 rgba(255,0,120,0.55);
-    transform:translate(2px,0);
-  }
-  91%{
-    text-shadow:-1px 0 rgba(0,200,255,0.45),1px 0 rgba(255,0,120,0.35);
-    transform:translate(-1px,0);
-  }
-  93%{
-    text-shadow:0 0 24px rgba(0,255,100,0.4);
-    transform:translate(0);
-  }
+  0%,84%,100%{text-shadow:0 0 20px rgba(0,255,100,0.45),0 0 40px rgba(0,255,100,0.15);transform:translate(0)}
+  86%{text-shadow:-3px 0 rgba(0,210,255,0.8),3px 0 rgba(255,0,100,0.6),0 0 20px rgba(0,255,100,0.3);transform:translate(-2px,0)}
+  87%{text-shadow:3px 0 rgba(0,210,255,0.8),-3px 0 rgba(255,0,100,0.6);transform:translate(2px,0)}
+  88%{text-shadow:-1px 0 rgba(0,210,255,0.5),1px 0 rgba(255,0,100,0.4);transform:translate(-1px,0)}
+  89%{text-shadow:0 0 20px rgba(0,255,100,0.45);transform:translate(0)}
+  /* Rapid double glitch */
+  91%{text-shadow:-2px 0 rgba(0,210,255,0.6),2px 0 rgba(255,0,100,0.4);transform:translate(-1px,0)}
+  92%{text-shadow:0 0 20px rgba(0,255,100,0.45);transform:translate(0)}
 }
-.title.glitch-active{
-  animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.45s forwards,
-             glitch 6s ease-in-out 2.5s infinite;
+.title.glitch-on{
+  animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.45s forwards,
+             glitch 5s ease-in-out 2s infinite;
 }
 
-/* Subtitle */
 .subtitle{
-  opacity:0;
-  animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
-  font-size:13px;color:rgba(255,255,255,0.28);
-  margin-bottom:38px;line-height:2.1;font-weight:400;
-  transition:opacity 0.5s ease;
+  font-size:13px;color:rgba(255,255,255,0.27);
+  line-height:1.95;font-weight:400;margin-bottom:28px;
+  opacity:0;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.58s forwards;
 }
-
-/* Divider */
 .divider{
-  opacity:0;
-  animation:fadeIn 0.6s ease 0.72s forwards;
-  width:50px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,255,100,0.25),transparent);
-  margin:0 auto 30px;
+  width:48px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,255,100,0.3),transparent);
+  margin-bottom:26px;
+  opacity:0;animation:fadeIn 0.5s ease 0.68s forwards;
 }
 @keyframes fadeIn{to{opacity:1}}
 
 /* Buttons */
 .btn-wrap{
-  opacity:0;
-  animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.78s forwards;
-  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%;
+  opacity:0;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.76s forwards;
 }
-
 .btn{
-  display:inline-flex;align-items:center;gap:9px;
+  flex:1;min-width:120px;max-width:160px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
   text-decoration:none;font-size:13px;font-weight:700;
-  padding:13px 26px;border-radius:12px;
-  color:#fff;letter-spacing:0.3px;
+  padding:12px 20px;border-radius:12px;
   cursor:pointer;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#041f0c,#07361a);
+  border:1px solid rgba(0,255,100,0.22);
+  color:rgba(0,255,100,0.9);
+  box-shadow:0 4px 16px rgba(0,255,100,0.08),inset 0 1px 0 rgba(0,255,100,0.06);
   transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),
-             box-shadow 0.3s cubic-bezier(0.16,1,0.3,1),
-             filter 0.3s ease;
+             box-shadow 0.3s ease,border-color 0.3s ease;
   will-change:transform;
 }
 .btn::before{
+  content:'';position:absolute;inset:0;border-radius:12px;
+  background:linear-gradient(135deg,rgba(0,255,100,0.06),transparent);
+  opacity:0;transition:opacity 0.3s ease;
+}
+.btn::after{
   content:'';position:absolute;
-  top:0;left:-120%;width:60%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.14),transparent);
-  animation:shimmer 4s ease-in-out 2s infinite;
+  top:0;left:-110%;width:55%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,255,100,0.1),transparent);
+  animation:shimmer 4.5s ease-in-out 2s infinite;
 }
-@keyframes shimmer{0%,100%{left:-120%}45%,55%{left:220%}}
+@keyframes shimmer{0%,100%{left:-110%}45%,55%{left:210%}}
+.btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 8px 26px rgba(0,255,100,0.18);
+  border-color:rgba(0,255,100,0.4);
+}
+.btn:hover::before{opacity:1}
+.btn:active{transform:translateY(1px) scale(0.98);transition-duration:0.08s}
 
-.btn:hover{transform:translateY(-3px) scale(1.02)}
-.btn:active{transform:translateY(1px) scale(0.98);transition-duration:0.1s;}
-
-.btn-tg{
-  background:linear-gradient(135deg,#0077b5 0%,#229ed9 100%);
-  border:1px solid rgba(34,158,217,0.25);
-  box-shadow:0 4px 18px rgba(34,158,217,0.2),inset 0 1px 0 rgba(255,255,255,0.07);
-}
-.btn-tg:hover{
-  box-shadow:0 8px 30px rgba(34,158,217,0.38),inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-.btn-yt{
-  background:linear-gradient(135deg,#b52222 0%,#e03c3c 100%);
-  border:1px solid rgba(224,60,60,0.25);
-  box-shadow:0 4px 18px rgba(224,60,60,0.18),inset 0 1px 0 rgba(255,255,255,0.07);
-}
-.btn-yt:hover{
-  box-shadow:0 8px 30px rgba(224,60,60,0.35),inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-/* Ripple */
 .ripple{
   position:absolute;border-radius:50%;
-  background:rgba(255,255,255,0.2);
+  background:rgba(0,255,100,0.15);
   transform:scale(0);
-  animation:rippleAnim 0.6s cubic-bezier(0.16,1,0.3,1);
+  animation:rippleOut 0.6s cubic-bezier(0.16,1,0.3,1);
   pointer-events:none;
 }
-@keyframes rippleAnim{to{transform:scale(4.5);opacity:0}}
+@keyframes rippleOut{to{transform:scale(4.5);opacity:0}}
 
-/* Footer */
 .footer{
-  opacity:0;
-  animation:slideUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.95s forwards;
-  margin-top:30px;
-  font-size:9px;font-weight:700;
-  color:rgba(0,255,100,0.22);
-  letter-spacing:3.5px;
+  margin-top:24px;font-size:9px;font-weight:700;
+  color:rgba(0,255,100,0.18);letter-spacing:3.5px;
   font-family:'Courier New',monospace;
-  padding-top:16px;
-  border-top:1px solid rgba(0,255,100,0.06);
+  padding-top:14px;border-top:1px solid rgba(0,255,100,0.05);
+  width:100%;
+  opacity:0;animation:fadeIn 0.5s ease 0.92s forwards;
 }
 
-@keyframes slideUp{
-  0%{opacity:0;transform:translateY(20px)}
-  100%{opacity:1;transform:translateY(0)}
-}
-
-/* State transition overlay */
-.ic-wrap{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  transition:opacity 0.35s cubic-bezier(0.4,0,0.2,1),
-             transform 0.35s cubic-bezier(0.4,0,0.2,1);
-}
-.ic-wrap.out{opacity:0;transform:scale(0.7) rotate(30deg);}
-.ic-wrap.in{opacity:1;transform:scale(1) rotate(0deg);}
+@keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
 
 <div class="grid-bg"></div>
 <div class="ambient"></div>
+<canvas id="particles"></canvas>
 <div class="term-bg" id="termBg"></div>
 
 <div class="wrap">
   <div class="ring-wrap">
-    <div class="pulse2"></div>
-    <div class="pulse1"></div>
-    <div class="ring1"></div>
-    <div class="ring2"></div>
-    <div class="ring3"></div>
-    <div class="ring4"></div>
-    <div class="icon-core" id="iconCore">
-      <div class="ic-wrap in" id="icWrap"></div>
-    </div>
+    <div class="pr pr3"></div>
+    <div class="pr pr2"></div>
+    <div class="pr pr1"></div>
+    <div class="arc arc4"></div>
+    <div class="arc arc3"></div>
+    <div class="arc arc2"></div>
+    <div class="arc arc1"></div>
+    <div class="arc-dash"></div>
+    <div class="glow-disc"></div>
+    <div class="icon-wrap" id="iconWrap"></div>
   </div>
 
   <div class="title" id="title"></div>
@@ -320,12 +293,12 @@ body::after{
   <div class="divider"></div>
 
   <div class="btn-wrap">
-    <a class="btn btn-tg" href="https://t.me/freefilebd" target="_blank">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+    <a class="btn" href="https://t.me/freefilebd" target="_blank">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
       Telegram
     </a>
-    <a class="btn btn-yt" href="https://youtube.com/@zolamff" target="_blank">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    <a class="btn" href="https://youtube.com/@zolamff" target="_blank">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
       YouTube
     </a>
   </div>
@@ -334,6 +307,67 @@ body::after{
 </div>
 
 <script>
+// ── Particles ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', () => { resize(); initParticles(); });
+
+function initParticles() {
+  particles = [];
+  const count = Math.floor((W * H) / 14000);
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.3,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: -Math.random() * 0.35 - 0.08,
+      alpha: Math.random() * 0.45 + 0.08,
+      flicker: Math.random() * Math.PI * 2,
+      flickerSpeed: Math.random() * 0.04 + 0.01,
+    });
+  }
+}
+initParticles();
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+  for (const p of particles) {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.flicker += p.flickerSpeed;
+    const a = p.alpha * (0.6 + 0.4 * Math.sin(p.flicker));
+
+    // Wrap
+    if (p.y < -4) p.y = H + 4;
+    if (p.x < -4) p.x = W + 4;
+    if (p.x > W + 4) p.x = -4;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,255,100,${a.toFixed(3)})`;
+    ctx.fill();
+
+    // Occasional glow dot
+    if (p.r > 1.0) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,255,100,${(a * 0.15).toFixed(3)})`;
+      ctx.fill();
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ── Auth state ──
 const params = new URLSearchParams(window.location.search);
 const s = params.get('s') || 'expired';
 
@@ -346,114 +380,75 @@ const iconSVGs = {
 };
 
 const cfg = {
-  offline:      { icon:'wifi',   title:'Server Offline',  sub:'The server is currently offline.<br>Please try again later.' },
-  network:      { icon:'wifi',   title:'Network Error',   sub:'Please check your internet<br>connection and try again.' },
-  tokenexpired: { icon:'update', title:'Update Required', sub:'Server requires a bypass update.<br>Contact your admin to proceed.' },
-  expired:      { icon:'lock',   title:'Access Expired',  sub:'Your access has expired.<br>Please contact admin to renew.' },
-  notfound:     { icon:'key',    title:'Not Registered',  sub:'Your device is not registered.<br>Contact admin to get access.' },
-  error:        { icon:'x',      title:'Auth Failed',     sub:'Failed to verify your device.<br>Please restart the game.' },
+  offline:      {icon:'wifi',   title:'Server Offline',  sub:'The server is currently offline.<br>Please try again later.'},
+  network:      {icon:'wifi',   title:'Network Error',   sub:'Please check your internet<br>connection and try again.'},
+  tokenexpired: {icon:'update', title:'Update Required', sub:'Server requires a bypass update.<br>Contact your admin to proceed.'},
+  expired:      {icon:'lock',   title:'Access Expired',  sub:'Your access has expired.<br>Please contact admin to renew.'},
+  notfound:     {icon:'key',    title:'Not Registered',  sub:'Your device is not registered.<br>Contact admin to get access.'},
+  error:        {icon:'x',      title:'Auth Failed',     sub:'Failed to verify your device.<br>Please restart the game.'},
 };
 
 const c = cfg[s] || cfg.error;
-
-// Set icon
-document.getElementById('icWrap').innerHTML = iconSVGs[c.icon];
-
-// Set subtitle
+document.getElementById('iconWrap').innerHTML = iconSVGs[c.icon];
 document.getElementById('subtitle').innerHTML = c.sub;
 
-// Typewriter title
 const titleEl = document.getElementById('title');
 setTimeout(() => {
   let i = 0;
   const type = () => {
-    if (i < c.title.length) {
-      titleEl.textContent += c.title[i++];
-      setTimeout(type, 52);
-    } else {
-      titleEl.classList.add('glitch-active');
-    }
+    if (i < c.title.length) { titleEl.textContent += c.title[i++]; setTimeout(type, 52); }
+    else titleEl.classList.add('glitch-on');
   };
   type();
 }, 480);
 
-// Ripple on buttons
+// Ripple
 document.querySelectorAll('.btn').forEach(btn => {
   btn.addEventListener('click', function(e) {
     const r = document.createElement('span');
-    r.classList.add('ripple');
+    r.className = 'ripple';
     const rect = this.getBoundingClientRect();
     const size = Math.max(rect.width, rect.height);
-    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px`;
+    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
     this.appendChild(r);
-    setTimeout(() => r.remove(), 600);
+    setTimeout(() => r.remove(), 620);
   });
 });
 
-// Terminal bg — starts after page load
-setTimeout(() => {
-  document.getElementById('termBg').classList.add('visible');
-}, 800);
-
+// Terminal
+setTimeout(() => document.getElementById('termBg').classList.add('on'), 1000);
 const termEl = document.getElementById('termBg');
-const termLines = [
-  { t:'sys',  tx:'ZOLAM_AUTH v2.4.1 :: INITIALIZING...' },
-  { t:'ok',   tx:'[SYS] Loading kernel modules... OK' },
-  { t:'ok',   tx:'[NET] Establishing secure tunnel... DONE' },
-  { t:'info', tx:'AUTH_CHECK :: device_id=0xA3F2C1D9B8E7' },
-  { t:'info', tx:'[SCAN] Verifying token integrity...' },
-  { t:'info', tx:'TOKEN_HASH: 8f3a2b1c9d4e5f6a7b8c9d0e' },
-  { t:'warn', tx:'[WARN] Session expired :: ts=1728757200' },
-  { t:'err',  tx:'STATUS :: ACCESS_DENIED' },
-  { t:'err',  tx:'[ERR] 0x403 :: Unauthorized device' },
-  { t:'err',  tx:'Checking bypass modules... FAILED' },
-  { t:'info', tx:'[LOG] ip=192.168.1.x port=8443 proto=TLS' },
-  { t:'info', tx:'ssl_cert: ZolamFF_ROOT_CA.pem :: valid' },
-  { t:'warn', tx:'[NET] ping 10.0.0.1 ... timeout (3000ms)' },
-  { t:'err',  tx:'reauth_attempt: 3/3 FAILED' },
-  { t:'sys',  tx:'[SYS] Dumping stack trace...' },
-  { t:'info', tx:'  at AuthModule.verify (auth.js:142:8)' },
-  { t:'info', tx:'  at TokenValidator.check (token.js:88:4)' },
-  { t:'info', tx:'  at Gateway.handle (gateway.js:56:12)' },
-  { t:'warn', tx:'[DB] SELECT * FROM sessions WHERE uid=?' },
-  { t:'err',  tx:'query_result: 0 rows :: session not found' },
-  { t:'ok',   tx:'[CRYPT] AES-256-GCM init... OK' },
-  { t:'err',  tx:'sig_verify: RSA-4096 MISMATCH :: invalid' },
-  { t:'err',  tx:'[SEC] Firewall rule #44 TRIGGERED' },
-  { t:'err',  tx:'BLOCK :: reason=expired_license :: code=403' },
-  { t:'ok',   tx:'[MOD] ZolamFF protection layer ACTIVE' },
-  { t:'info', tx:'channel: youtube.com/@zolamff' },
-  { t:'info', tx:'support: t.me/freefilebd' },
-  { t:'sys',  tx:'ZOLAM_AUTH :: session terminated. Goodbye.' },
-  { t:'sys',  tx:'════════════════════════════════════════' },
+const lines = [
+  {t:'sys',tx:'ZOLAM_AUTH v2.4.1 :: INITIALIZING...'},
+  {t:'ok', tx:'[SYS] Loading kernel modules... OK'},
+  {t:'ok', tx:'[NET] Establishing secure tunnel... DONE'},
+  {t:'info',tx:'AUTH_CHECK :: device_id=0xA3F2C1D9B8E7'},
+  {t:'info',tx:'[SCAN] Verifying token integrity...'},
+  {t:'warn',tx:'[WARN] Session expired :: ts=1728757200'},
+  {t:'err', tx:'STATUS :: ACCESS_DENIED'},
+  {t:'err', tx:'[ERR] 0x403 :: Unauthorized device'},
+  {t:'err', tx:'Checking bypass modules... FAILED'},
+  {t:'info',tx:'[LOG] ip=192.168.1.x port=8443 proto=TLS'},
+  {t:'warn',tx:'[NET] ping 10.0.0.1 ... timeout (3000ms)'},
+  {t:'err', tx:'reauth_attempt: 3/3 FAILED'},
+  {t:'ok',  tx:'[CRYPT] AES-256-GCM init... OK'},
+  {t:'err', tx:'sig_verify: RSA-4096 MISMATCH'},
+  {t:'ok',  tx:'[MOD] ZolamFF protection layer ACTIVE'},
+  {t:'sys', tx:'ZOLAM_AUTH :: session terminated.'},
+  {t:'sys', tx:'════════════════════════════════'},
 ];
-
-const termColors = {
-  sys:  'rgba(0,255,100,0.6)',
-  ok:   'rgba(0,230,90,0.85)',
-  info: 'rgba(0,190,75,0.45)',
-  warn: 'rgba(255,210,0,0.72)',
-  err:  'rgba(255,75,75,0.82)',
-};
-
-let content = '', lineIdx = 0, charIdx = 0;
-function termTick() {
-  if (lineIdx >= termLines.length) { lineIdx = 0; content = ''; charIdx = 0; }
-  const line = termLines[lineIdx];
-  const full = '> ' + line.tx;
-  const col = termColors[line.t];
-  if (charIdx <= full.length) {
-    const partial = full.slice(0, charIdx) + (charIdx < full.length ? '█' : '');
-    termEl.innerHTML = content + `<span style="color:${col}">${partial}</span>`;
-    charIdx++;
+const col = {sys:'rgba(0,255,100,0.6)',ok:'rgba(0,230,90,0.85)',info:'rgba(0,190,75,0.45)',warn:'rgba(255,210,0,0.72)',err:'rgba(255,75,75,0.82)'};
+let buf='',li=0,ci=0;
+setInterval(()=>{
+  if(li>=lines.length){li=0;buf='';ci=0;}
+  const ln=lines[li],full='> '+ln.tx,c2=col[ln.t];
+  if(ci<=full.length){
+    termEl.innerHTML=buf+`<span style="color:${c2}">${full.slice(0,ci)+(ci<full.length?'█':'')}</span>`;ci++;
   } else {
-    content += `<span style="color:${col}">> ${line.tx}</span><br>`;
-    lineIdx++; charIdx = 0;
-    const brs = content.split('<br>');
-    if (brs.length > 46) content = brs.slice(brs.length - 34).join('<br>') + '<br>';
+    buf+=`<span style="color:${c2}">> ${ln.tx}</span><br>`;li++;ci=0;
+    const p=buf.split('<br>');if(p.length>50)buf=p.slice(p.length-36).join('<br>')+'<br>';
   }
-}
-setInterval(termTick, 22);
+},22);
 </script>
 </body>
 </html>
