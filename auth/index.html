@@ -9,18 +9,16 @@
 html,body{height:100%;background:#000000;font-family:'Segoe UI',Arial,sans-serif;overflow:hidden;}
 body{display:flex;align-items:center;justify-content:center;position:relative;}
 
-/* Particle canvas */
-#particles{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#particles{position:fixed;inset:0;z-index:0;pointer-events:none;will-change:transform;}
 
-/* Deep ambient */
+
 .ambient{
   position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:radial-gradient(ellipse 50% 40% at 50% 44%,rgba(0,255,100,0.05) 0%,transparent 65%);
+  background:radial-gradient(ellipse 55% 45% at 50% 44%,rgba(0,255,100,0.06) 0%,transparent 65%);
   animation:ambPulse 5s ease-in-out infinite;
 }
-@keyframes ambPulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.04)}}
+@keyframes ambPulse{0%,100%{opacity:0.7}50%{opacity:1}}
 
-/* Main wrap */
 .wrap{
   position:relative;z-index:3;text-align:center;
   width:88%;max-width:360px;padding:0 24px;
@@ -29,7 +27,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
 }
 @keyframes wrapIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:none}}
 
-/* ── Ring system ── */
 .ring-wrap{
   width:168px;height:168px;margin-bottom:38px;
   position:relative;flex-shrink:0;
@@ -37,7 +34,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
 }
 @keyframes ringIn{from{opacity:0;transform:scale(0.4)}to{opacity:1;transform:scale(1)}}
 
-/* Outer pulse rings */
 .pr{
   position:absolute;border-radius:50%;border:1px solid rgba(0,255,100,0.2);
   top:50%;left:50%;transform:translate(-50%,-50%);
@@ -50,8 +46,7 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   100%{transform:translate(-50%,-50%) scale(1.1);opacity:0}
 }
 
-/* Arc rings */
-.arc{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;}
+.arc{position:absolute;inset:0;border-radius:50%;border:2px solid transparent;will-change:transform;}
 
 .arc1{
   border-top-color:#00ff64;
@@ -67,7 +62,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   57%{filter:drop-shadow(0 0 2px #00ff64);opacity:0.5}
   59%{filter:drop-shadow(0 0 12px #00ff64) drop-shadow(0 0 24px rgba(0,255,100,0.55));opacity:1}
 }
-
 .arc2{
   inset:15px;
   border-bottom-color:rgba(0,255,100,0.65);
@@ -80,7 +74,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   40%{filter:drop-shadow(0 0 1px rgba(0,255,100,0.3));opacity:0.55}
   42%{filter:drop-shadow(0 0 8px rgba(0,255,100,0.7));opacity:1}
 }
-
 .arc3{
   inset:30px;
   border-right-color:rgba(0,255,100,0.3);
@@ -88,13 +81,10 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   animation:spin3 2.4s linear infinite reverse;
   filter:drop-shadow(0 0 3px rgba(0,255,100,0.3));
 }
-
 .arc4{
   inset:6px;border-color:rgba(0,255,100,0.03);
   animation:breathe 4s ease-in-out infinite;
 }
-
-/* Electric arc dash */
 .arc-dash{
   position:absolute;inset:0;border-radius:50%;
   border:1.5px dashed rgba(0,255,100,0.0);
@@ -107,13 +97,11 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   55%{border-color:rgba(0,255,100,0.3);transform:rotate(40deg)}
   60%{border-color:rgba(0,255,100,0.0);transform:rotate(55deg)}
 }
-
 @keyframes spin1{to{transform:rotate(360deg)}}
 @keyframes spin2{to{transform:rotate(360deg)}}
 @keyframes spin3{to{transform:rotate(360deg)}}
 @keyframes breathe{0%,100%{transform:scale(1);opacity:0.4}50%{transform:scale(1.08);opacity:0.9}}
 
-/* Glow disc */
 .glow-disc{
   position:absolute;top:50%;left:50%;
   width:55%;height:55%;transform:translate(-50%,-50%);
@@ -126,7 +114,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   50%{transform:translate(-50%,-50%) scale(1.15);opacity:1}
 }
 
-/* Icon */
 .icon-wrap{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
 .ic{
   width:34px;height:34px;fill:none;
@@ -139,32 +126,103 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   50%{filter:drop-shadow(0 0 14px rgba(0,255,100,1)) drop-shadow(0 0 24px rgba(0,255,100,0.5));opacity:1}
 }
 @keyframes iconFlicker{
-  0%,100%{opacity:1}
-  30%{opacity:0.7}
-  32%{opacity:1}
-  65%{opacity:0.65}
-  67%{opacity:1}
+  0%,100%{opacity:1}30%{opacity:0.7}32%{opacity:1}65%{opacity:0.65}67%{opacity:1}
 }
 
-/* Title */
+/* ── GLITCH TITLE (upgraded) ── */
 .title{
   font-size:26px;font-weight:800;letter-spacing:-0.3px;
   color:#00ff64;min-height:34px;margin-bottom:10px;
   text-shadow:0 0 20px rgba(0,255,100,0.45),0 0 40px rgba(0,255,100,0.15);
   opacity:0;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;
-}
-@keyframes glitch{
-  0%,84%,100%{text-shadow:0 0 20px rgba(0,255,100,0.45),0 0 40px rgba(0,255,100,0.15);transform:translate(0)}
-  86%{text-shadow:-3px 0 rgba(0,210,255,0.8),3px 0 rgba(255,0,100,0.6),0 0 20px rgba(0,255,100,0.3);transform:translate(-2px,0)}
-  87%{text-shadow:3px 0 rgba(0,210,255,0.8),-3px 0 rgba(255,0,100,0.6);transform:translate(2px,0)}
-  88%{text-shadow:-1px 0 rgba(0,210,255,0.5),1px 0 rgba(255,0,100,0.4);transform:translate(-1px,0)}
-  89%{text-shadow:0 0 20px rgba(0,255,100,0.45);transform:translate(0)}
-  91%{text-shadow:-2px 0 rgba(0,210,255,0.6),2px 0 rgba(255,0,100,0.4);transform:translate(-1px,0)}
-  92%{text-shadow:0 0 20px rgba(0,255,100,0.45);transform:translate(0)}
+  position:relative;
 }
 .title.glitch-on{
   animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.45s forwards,
-             glitch 5s ease-in-out 2s infinite;
+             glitch 3.5s ease-in-out 1.5s infinite;
+}
+@keyframes glitch{
+  0%,78%,100%{
+    text-shadow:0 0 20px rgba(0,255,100,0.45),0 0 40px rgba(0,255,100,0.15);
+    transform:translate(0);clip-path:none;
+  }
+  80%{
+    text-shadow:-4px 0 rgba(0,210,255,0.9),4px 0 rgba(255,0,100,0.8),0 0 20px rgba(0,255,100,0.3);
+    transform:translate(-3px,0) skewX(-2deg);
+  }
+  81%{
+    text-shadow:4px 0 rgba(0,210,255,0.9),-4px 0 rgba(255,0,100,0.8);
+    transform:translate(3px,0) skewX(2deg);
+  }
+  82%{
+    text-shadow:-2px 0 rgba(0,210,255,0.6),2px 0 rgba(255,0,100,0.5);
+    transform:translate(-1px,0);
+  }
+  83%{
+    text-shadow:0 0 20px rgba(0,255,100,0.45);
+    transform:translate(0);
+  }
+  86%{
+    text-shadow:-5px 0 rgba(0,210,255,1),5px 0 rgba(255,0,100,1),0 0 0 rgba(0,255,100,0);
+    transform:translate(-4px,1px) skewX(-4deg);
+    filter:brightness(1.5);
+  }
+  87%{
+    text-shadow:5px 0 rgba(0,210,255,1),-5px 0 rgba(255,0,100,1);
+    transform:translate(4px,-1px) skewX(4deg);
+    filter:brightness(1.5);
+  }
+  88%{
+    text-shadow:0 0 20px rgba(0,255,100,0.45);
+    transform:translate(0);
+    filter:brightness(1);
+  }
+  90%{
+    text-shadow:-3px 0 rgba(0,210,255,0.7),3px 0 rgba(255,0,100,0.6);
+    transform:translate(-2px,0);
+  }
+  91%{
+    text-shadow:0 0 20px rgba(0,255,100,0.45);
+    transform:translate(0);
+  }
+}
+
+/* Glitch pseudo bars */
+.title.glitch-on::before,
+.title.glitch-on::after{
+  content:attr(data-text);
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  color:#00ff64;
+}
+.title.glitch-on::before{
+  animation:glitchTop 3.5s ease-in-out 1.5s infinite;
+  clip-path:polygon(0 0,100% 0,100% 35%,0 35%);
+  left:-2px;
+}
+.title.glitch-on::after{
+  animation:glitchBot 3.5s ease-in-out 1.5s infinite;
+  clip-path:polygon(0 65%,100% 65%,100% 100%,0 100%);
+  left:2px;
+}
+@keyframes glitchTop{
+  0%,79%,84%,100%{transform:translate(0);opacity:0;}
+  80%{transform:translate(-4px,0);opacity:1;filter:hue-rotate(180deg);}
+  81%{transform:translate(4px,0);opacity:1;filter:hue-rotate(90deg);}
+  82%{transform:translate(-2px,0);opacity:0.7;}
+  83%{transform:translate(0);opacity:0;}
+  85%{transform:translate(-6px,0);opacity:1;filter:hue-rotate(270deg);}
+  86%{transform:translate(6px,0);opacity:1;}
+  87%{transform:translate(0);opacity:0;}
+}
+@keyframes glitchBot{
+  0%,79%,84%,100%{transform:translate(0);opacity:0;}
+  80%{transform:translate(4px,0);opacity:1;filter:hue-rotate(90deg);}
+  81%{transform:translate(-4px,0);opacity:1;filter:hue-rotate(180deg);}
+  82%{transform:translate(2px,0);opacity:0.7;}
+  83%{transform:translate(0);opacity:0;}
+  85%{transform:translate(6px,0);opacity:1;filter:hue-rotate(270deg);}
+  86%{transform:translate(-6px,0);opacity:1;}
+  87%{transform:translate(0);opacity:0;}
 }
 
 .subtitle{
@@ -180,7 +238,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
 }
 @keyframes fadeIn{to{opacity:1}}
 
-/* Buttons */
 .btn-wrap{
   display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%;
   opacity:0;animation:slideUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.76s forwards;
@@ -195,9 +252,7 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   border:1px solid rgba(0,255,100,0.22);
   color:rgba(0,255,100,0.9);
   box-shadow:0 4px 16px rgba(0,255,100,0.08),inset 0 1px 0 rgba(0,255,100,0.06);
-  transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),
-             box-shadow 0.3s ease,border-color 0.3s ease;
-  will-change:transform;
+  transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),box-shadow 0.3s ease,border-color 0.3s ease;
 }
 .btn::before{
   content:'';position:absolute;inset:0;border-radius:12px;
@@ -211,11 +266,7 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   animation:shimmer 4.5s ease-in-out 2s infinite;
 }
 @keyframes shimmer{0%,100%{left:-110%}45%,55%{left:210%}}
-.btn:hover{
-  transform:translateY(-3px) scale(1.02);
-  box-shadow:0 8px 26px rgba(0,255,100,0.18);
-  border-color:rgba(0,255,100,0.4);
-}
+.btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 26px rgba(0,255,100,0.18);border-color:rgba(0,255,100,0.4);}
 .btn:hover::before{opacity:1}
 .btn:active{transform:translateY(1px) scale(0.98);transition-duration:0.08s}
 
@@ -236,7 +287,6 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
   width:100%;
   opacity:0;animation:fadeIn 0.5s ease 0.92s forwards;
 }
-
 @keyframes slideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 </style>
 </head>
@@ -278,66 +328,65 @@ body{display:flex;align-items:center;justify-content:center;position:relative;}
 </div>
 
 <script>
-// ── Particles ──
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [];
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
+
+// ── Particles (delta-time stable) ──
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+let W,H,particles=[];
+
+function resize(){
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
 }
 resize();
-window.addEventListener('resize', () => { resize(); initParticles(); });
+window.addEventListener('resize',()=>{resize();initParticles();});
 
-function initParticles() {
-  particles = [];
-  const count = Math.floor((W * H) / 14000);
-  for (let i = 0; i < count; i++) {
+function initParticles(){
+  particles=[];
+  const count=Math.floor((W*H)/14000);
+  for(let i=0;i<count;i++){
     particles.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: Math.random() * 1.2 + 0.3,
-      vx: (Math.random() - 0.5) * 0.25,
-      vy: -Math.random() * 0.35 - 0.08,
-      alpha: Math.random() * 0.45 + 0.08,
-      flicker: Math.random() * Math.PI * 2,
-      flickerSpeed: Math.random() * 0.04 + 0.01,
+      x:Math.random()*W,
+      y:Math.random()*H,
+      r:Math.random()*1.5+0.5,
+      vx:(Math.random()-0.5)*0.06,   // px per ms
+      vy:-(Math.random()*0.08+0.02), // always upward
+      alpha:Math.random()*0.38+0.07,
+      phase:Math.random()*Math.PI*2,
+      phaseSpeed:Math.random()*0.0025+0.001, // rad per ms
     });
   }
 }
 initParticles();
 
-function drawParticles() {
-  ctx.clearRect(0, 0, W, H);
-  for (const p of particles) {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.flicker += p.flickerSpeed;
-    const a = p.alpha * (0.6 + 0.4 * Math.sin(p.flicker));
-    if (p.y < -4) p.y = H + 4;
-    if (p.x < -4) p.x = W + 4;
-    if (p.x > W + 4) p.x = -4;
+let lastTs=0;
+function drawParticles(ts){
+  const dt=Math.min(ts-lastTs,50); // cap at 50ms so tab-switch doesn't jump
+  lastTs=ts;
+  ctx.clearRect(0,0,W,H);
+  for(const p of particles){
+    p.x+=p.vx*dt;
+    p.y+=p.vy*dt;
+    p.phase+=p.phaseSpeed*dt;
+    const a=p.alpha*(0.45+0.55*Math.sin(p.phase));
+    if(p.y<-4)p.y=H+4;
+    if(p.x<-4)p.x=W+4;
+    if(p.x>W+4)p.x=-4;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0,255,100,${a.toFixed(3)})`;
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(0,255,100,${a.toFixed(3)})`;
     ctx.fill();
-    if (p.r > 1.0) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0,255,100,${(a * 0.15).toFixed(3)})`;
-      ctx.fill();
-    }
   }
   requestAnimationFrame(drawParticles);
 }
-drawParticles();
+requestAnimationFrame(drawParticles);
 
 // ── Auth state ──
-const params = new URLSearchParams(window.location.search);
-const s = params.get('s') || 'expired';
+const params=new URLSearchParams(window.location.search);
+const s=params.get('s')||'expired';
 
-const iconSVGs = {
+const iconSVGs={
   wifi:`<svg class="ic" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/><path d="M10.71 5.05A16 16 0 0 1 22.56 9"/><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>`,
   update:`<svg class="ic" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`,
   lock:`<svg class="ic" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
@@ -345,39 +394,44 @@ const iconSVGs = {
   x:`<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
 };
 
-const cfg = {
-  offline:      {icon:'wifi',   title:'Server Offline',  sub:'The server is currently offline.<br>Please try again later.'},
-  network:      {icon:'wifi',   title:'Network Error',   sub:'Please check your internet<br>connection and try again.'},
-  tokenexpired: {icon:'update', title:'Update Required', sub:'Server requires a bypass update.<br>Contact your admin to proceed.'},
-  expired:      {icon:'lock',   title:'Access Expired',  sub:'Your access has expired.<br>Please contact admin to renew.'},
-  notfound:     {icon:'key',    title:'Not Registered',  sub:'Your device is not registered.<br>Contact admin to get access.'},
-  error:        {icon:'x',      title:'Auth Failed',     sub:'Failed to verify your device.<br>Please restart the game.'},
+const cfg={
+  offline:     {icon:'wifi',  title:'Server Offline',  sub:'The server is currently offline.<br>Please try again later.'},
+  network:     {icon:'wifi',  title:'Network Error',   sub:'Please check your internet<br>connection and try again.'},
+  tokenexpired:{icon:'update',title:'Update Required', sub:'Server requires a bypass update.<br>Contact your admin to proceed.'},
+  expired:     {icon:'lock',  title:'Access Expired',  sub:'Your access has expired.<br>Please contact admin to renew.'},
+  notfound:    {icon:'key',   title:'Not Registered',  sub:'Your device is not registered.<br>Contact admin to get access.'},
+  error:       {icon:'x',     title:'Auth Failed',     sub:'Failed to verify your device.<br>Please restart the game.'},
 };
 
-const c = cfg[s] || cfg.error;
-document.getElementById('iconWrap').innerHTML = iconSVGs[c.icon];
-document.getElementById('subtitle').innerHTML = c.sub;
+const c=cfg[s]||cfg.error;
+document.getElementById('iconWrap').innerHTML=iconSVGs[c.icon];
+document.getElementById('subtitle').innerHTML=c.sub;
 
-const titleEl = document.getElementById('title');
-setTimeout(() => {
-  let i = 0;
-  const type = () => {
-    if (i < c.title.length) { titleEl.textContent += c.title[i++]; setTimeout(type, 52); }
-    else titleEl.classList.add('glitch-on');
+const titleEl=document.getElementById('title');
+titleEl.setAttribute('data-text','');
+setTimeout(()=>{
+  let i=0;
+  const type=()=>{
+    if(i<c.title.length){
+      titleEl.textContent+=c.title[i++];
+      titleEl.setAttribute('data-text',titleEl.textContent);
+      setTimeout(type,52);
+    } else {
+      titleEl.classList.add('glitch-on');
+    }
   };
   type();
-}, 480);
+},480);
 
-// Ripple
-document.querySelectorAll('.btn').forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    const r = document.createElement('span');
-    r.className = 'ripple';
-    const rect = this.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    r.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const r=document.createElement('span');
+    r.className='ripple';
+    const rect=this.getBoundingClientRect();
+    const size=Math.max(rect.width,rect.height);
+    r.style.cssText=`width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px`;
     this.appendChild(r);
-    setTimeout(() => r.remove(), 620);
+    setTimeout(()=>r.remove(),620);
   });
 });
 </script>
